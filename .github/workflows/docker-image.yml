@@ -31,19 +31,24 @@ jobs:
       env:
         DOCKER_USER: ${{ secrets.DOCKER_USER }}
         DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }} 
-        NEW_VERSION: ${{ steps.version.outputs.version }} 
+         
       run: |
         echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USER" --password-stdin
         echo "nueva version: $NEW_VERSION"
-    # - name: Build Docker Image
-    #   run: |
-    #     docker build -t felipercz/docker-graph:1.0.1 .
-    #     docker build -t felipercz/docker-graph:latest . 
         
-    # - name: Push Docker Image
-    #   run: |
-    #     docker push felipercz/docker-graph:1.0.1
-    #     docker push felipercz/docker-graph:latest 
+    - name: Build Docker Image
+      env:
+        NEW_VERSION: ${{ steps.version.outputs.version }}
+      run: |
+        docker build -t felipercz/docker-graph:$NEW_VERSION .
+        docker build -t felipercz/docker-graph:latest . 
+        
+    - name: Push Docker Image
+      env:
+          NEW_VERSION: ${{ steps.version.outputs.version }}
+      run: |
+        docker push felipercz/docker-graph:$NEW_VERSION
+        docker push felipercz/docker-graph:latest 
         
       
     
