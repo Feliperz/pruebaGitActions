@@ -22,9 +22,15 @@ jobs:
         DOCKER_USER: ${{ secrets.DOCKER_USER }}
         DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }} 
       run: |
-        echo "Iniciando Login"
         echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USER" --password-stdin
-        echo "Login completado"
+
+    - name: Build Docker Image
+      run: |
+        docker build -t felipercz/docker-graph:1.0.1 . 
         
+    - name: Push Docker Image
+      run: |
+        docker push felipercz/docker-graph:1.0.1
+      
     
       
