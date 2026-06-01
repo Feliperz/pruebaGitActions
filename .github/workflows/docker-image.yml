@@ -32,7 +32,7 @@ jobs:
     - name: Push Docker Image
       run: |
         docker push felipercz/docker-graph:1.0.1
-        docker build -t felipercz/docker-graph:latest . 
+        docker build -t felipercz/docker-graph:latest 
         
       
     
