@@ -17,22 +17,31 @@ jobs:
       uses: actions/checkout@v4
       with:
         fetch-depth: 0
+        
+    - name: Git Semantic Version
+      uses: PaulHatch/semantic-version@v4.0.3
+      with:
+        major_pattern: "major:"
+        minor_pattern: "feat:"
+        format: "${major}.${minor}.${patch}-prerelease${increment}"
+      
     - name: Docker login
       env:
         DOCKER_USER: ${{ secrets.DOCKER_USER }}
         DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }} 
+        NEW_VERSION: ${{ steps.version.outputs.version }} 
       run: |
         echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USER" --password-stdin
-
-    - name: Build Docker Image
-      run: |
-        docker build -t felipercz/docker-graph:1.0.1 .
-        docker build -t felipercz/docker-graph:latest . 
+        echo "nueva version: $NEW_VERSION"
+    # - name: Build Docker Image
+    #   run: |
+    #     docker build -t felipercz/docker-graph:1.0.1 .
+    #     docker build -t felipercz/docker-graph:latest . 
         
-    - name: Push Docker Image
-      run: |
-        docker push felipercz/docker-graph:1.0.1
-        docker push felipercz/docker-graph:latest 
+    # - name: Push Docker Image
+    #   run: |
+    #     docker push felipercz/docker-graph:1.0.1
+    #     docker push felipercz/docker-graph:latest 
         
       
     
